@@ -1,0 +1,4 @@
+Sitemap: https://jskm.github.io/sitemapindex.xml
+
+User-Agent: *
+Host: jskm.github.io

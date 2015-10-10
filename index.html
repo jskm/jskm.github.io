@@ -1,1 +1,383 @@
-"Hello World" 
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<base href="https://jskm.github.io/">
+<meta name="description" content="jskm's development blog.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noetic Circuits</title>
+<link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta content="#5670d4" name="theme-color">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<link rel="canonical" href="https://jskm.github.io/">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/segmentation-progress/" type="text/html">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://jskm.github.io/">
+
+                <span id="blog-title">Noetic Circuits</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="archive.html">Archive</a>
+                </li>
+<li>
+<a href="categories/">Tags</a>
+                </li>
+<li>
+<a href="rss.xml">RSS feed</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+
+<div class="postindex">
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/segmentation-progress/" class="u-url">Segmentation Progress</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">
+                jskm
+            </span></p>
+            <p class="dateline"><a href="posts/segmentation-progress/" rel="bookmark"><time class="published dt-published" datetime="2015-09-09T17:00:00-04:00" title="2015-09-09 17:00">2015-09-09 17:00</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>I managed to make some progress with map segmentation. I've been working with the scikit-image graph module, which has a fast implementation of Dijkstra's algorithm on numpy arrays. I've had it in mind since I saw this post a couple of weeks ago:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://scipy-user.10969.n7.nabble.com/SciPy-User-Efficient-Dijkstra-on-a-large-grid-td18144.html#message18156">http://scipy-user.10969.n7.nabble.com/SciPy-User-Efficient-Dijkstra-on-a-large-grid-td18144.html#message18156</a></li>
+</ul>
+<p>It took me a long time to figure out how to use it properly. I even took to reading and modifying the source code to get the results I expected, which was complicated by the fact that it's written with Cython. I ended up removing the Cython declarations and using it as a Python module so I could follow the internal state, and eventually found the right inputs to use for it to work without modification.</p>
+<img alt="/images/Progress1.png" src="images/Progress1.png"><img alt="/images/Progress2.png" src="images/Progress2.png"><img alt="/images/Progress3.png" src="images/Progress3.png">
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/defining-spaces/" class="u-url">Defining Spaces</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">
+                jskm
+            </span></p>
+            <p class="dateline"><a href="posts/defining-spaces/" rel="bookmark"><time class="published dt-published" datetime="2015-09-04T04:41:00-04:00" title="2015-09-04 04:41">2015-09-04 04:41</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Here's what I've managed for defining spaces so far. Just kept blindly
+using a number of scipy image processing functions till I managed to
+figure out what they did. Quickly noticed that the <a class="reference external" href="https://en.wikipedia.org/wiki/Distance_transform">distance transform
+function</a> had
+potential, but I've spent an entire day trying to learn how to segment
+the map using that data. Attached are a couple of plots I generated
+showing the kind of information I've been able to extract. It looks like
+taking the local maxima of the distance transform does reasonably well
+for identifying distinct spaces. Now I think I need something similar to
+the <a class="reference external" href="https://en.wikipedia.org/wiki/Watershed_(image_processing)">watershed
+transform</a>
+to actually establish the boundaries of each room.</p>
+<img alt="/images/Spaces1.png" src="images/Spaces1.png"><img alt="/images/Spaces2.png" src="images/Spaces2.png">
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/events-scrolling/" class="u-url">Events, Scrolling</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">
+                jskm
+            </span></p>
+            <p class="dateline"><a href="posts/events-scrolling/" rel="bookmark"><time class="published dt-published" datetime="2015-08-27T16:02:00-04:00" title="2015-08-27 16:02">2015-08-27 16:02</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>For events, I was thinking of using publish/subscribe to connect the
+game's components and systems with each other. In that case I'd try to
+use an existing library, and
+<a class="reference external" href="http://pubsub.sourceforge.net/">PyPubSub</a> might be an option. Might
+also consider extracting the <a class="reference external" href="https://github.com/django/django/tree/master/django/dispatch">dispatch
+module</a>
+from Django
+(<a class="reference external" href="https://docs.djangoproject.com/en/1.8/topics/signals/">docs</a>) if
+it's independent enough. Though I don't know enough about the
+performance consequences of something like this, and performance is
+going to be a significant issue soon.</p>
+<p>I'll need to do another rewrite soon, because the code is not at all
+designed to handle a scrolling viewport. Too much of it is based on
+assumptions about the screen being a single map. There are a lot of
+design issues to work out before that can happen properly, and at the
+same time I should think about reducing the amount of unnecessary work
+done on each frame. I likely won't be able to manage that before
+Saturday.</p>
+<p>In the end, scrolling might be something that's better off dropped,
+because it substantially complicates many parts of the game. It depends
+on whether I'd be able to find the right abstraction to limit that.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/infinite-world/" class="u-url">Infinite World</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">
+                jskm
+            </span></p>
+            <p class="dateline"><a href="posts/infinite-world/" rel="bookmark"><time class="published dt-published" datetime="2015-08-26T10:21:00-04:00" title="2015-08-26 10:21">2015-08-26 10:21</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>It took about 16 hours, but I managed to stitch multiple maps together
+with only rare defects on the edges. It looks really good to me, and the
+errors are likely just because I cut a couple of corners in the
+smoothing phase of the generation algorithm. Currently the game has no
+viewport concept, rendering a map per screen and switching maps when you
+walk off the border. I'm intending to redesign it for smooth scrolling,
+but that's been more of a challenge. I've been struggling with designing
+a world model for the game, to abstract away the individual maps and
+unify location handling.</p>
+<p>As for what I might work on next... I could try spawning creatures
+and giving them basic behaviors. That sounds a bit complicated, though.
+Useful behavior for NPCs requires giving meaning to spaces in the world,
+and that might take a while to figure out. I wanted to prototype
+communication/interaction systems, but combat systems will be easier to
+get started on, and they don't need particularly intelligent behavior.</p>
+<p>Pathfinding could be worth looking at. I just found <a class="reference external" href="http://paleoludic.com/writing/">this
+blog</a>, which has an interesting
+approach to roguelike game structure. It's rather different from what
+I've done so far, though. What I've got right now is an infinite world,
+so I don't know if <a class="reference external" href="http://www.roguebasin.com/index.php?title=The_Incredible_Power_of_Dijkstra_Maps">Dijkstra
+maps</a>
+are feasible.</p>
+<p>There are also field-of-view and line-of-sight algorithms. I'm looking
+at <a class="reference external" href="http://www.roguebasin.com/index.php?title=Restrictive_Precise_Angle_Shadowcasting">Restrictive Precise Angle
+Shadowcasting</a>
+for the FOV algorithm.
+<a class="reference external" href="http://www.roguebasin.com/index.php?title=FastLOS">FastLOS</a> looks
+interesting; I'd have to implement it to understand what it actually
+does.</p>
+<p>I haven't actually set up an event system, so inter-object communication
+is kind of limited at the moment. There are also a whole lot of
+optimization issues. Making the maps larger is very costly and I'll have
+to rewrite some of the drawing and update routines.</p>
+<p>I may also look at increasing terrain complexity, creating more
+interesting features. Maybe wilderness or town maps as I mentioned
+before. That's somewhat easier to make visible progress on with the
+current state of the game. And there are lots of links to terrain
+generation material. A few such:</p>
+<p>On noise:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://code.google.com/p/fractalterraingeneration/w/list">https://code.google.com/p/fractalterraingeneration/w/list</a></li>
+<li><a class="reference external" href="http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf">http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf</a></li>
+<li><a class="reference external" href="http://staffwww.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java">http://staffwww.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java</a></li>
+<li><a class="reference external" href="https://github.com/caseman/noise">https://github.com/caseman/noise</a></li>
+</ul>
+<div class="line-block">
+<div class="line">You might have already seen this one before:</div>
+<div class="line"><a class="reference external" href="http://www-cs-students.stanford.edu/~amitp/game-programming/polygon-map-generation/">http://www-cs-students.stanford.edu/~amitp/game-programming/polygon-map-generation/</a></div>
+</div>
+<div class="line-block">
+<div class="line">And the more general:</div>
+<div class="line"><a class="reference external" href="http://www-cs-students.stanford.edu/~amitp/gameprog.html">http://www-cs-students.stanford.edu/~amitp/gameprog.html</a></div>
+</div>
+<div class="line-block">
+<div class="line">There's this very interesting demo:</div>
+<div class="line"><a class="reference external" href="http://tinykeep.com/dungen/">http://tinykeep.com/dungen/</a></div>
+<div class="line">With explanation:</div>
+<div class="line"><a class="reference external" href="https://www.reddit.com/r/gamedev/comments/1dlwc4/procedural_dungeon_generation_algorithm_explained/">https://www.reddit.com/r/gamedev/comments/1dlwc4/procedural_dungeon_generation_algorithm_explained/</a></div>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/rewrite-numpy-scipy/" class="u-url">Rewrite, NumPy, SciPy</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">
+                jskm
+            </span></p>
+            <p class="dateline"><a href="posts/rewrite-numpy-scipy/" rel="bookmark"><time class="published dt-published" datetime="2015-08-22T05:17:00-04:00" title="2015-08-22 05:17">2015-08-22 05:17</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>I'm feeling pretty good now. Friday was a really productive day. I began rewriting the game in-place, tearing open the code and extracting it into neater compartments. Once I got into it, it became surprisingly easy to progress. I think it helped that, after cutting out each piece, being able to focus on returning the program to a working state kept me on track. In the last day and a half, I've been able to unravel the nest of patchwork hackery I'd put together and get the program looking sensible again.</p>
+<p>After initially cleaning up the game loop, I started thinking about the possibility of live-coding. Did a little research, and found out how to spawn an IPython console in a separate thread, with access to the game's internal state. Being able to inspect and modify the game's map structure and other data makes it much easier to follow what the map generation process is doing. I've managed to put together a couple of nice debug mechanisms and visualization functions, which should help with future complications.</p>
+<p>Unfortunately Python doesn't have enough support for full live-coding. I can reload changed modules, but it won't update existing objects. After hearing about Clojure's advantages here, I'm more motivated to finally look into it now. Maybe once I'm done with my ideas for the roguelike.</p>
+<p>I've reworked map handling to use numpy, which substantially increased the speed of the dungeon generation algorithm. It can run several iterations on the current map size in tens of milliseconds, much better than the couple of seconds it took before. I improved the way terrain variation was implemented, and based it on a hash function as mentioned before. I also started putting together the entity-component system, but since I have no idea what it really ought to look like, I don't know whether I've created some kind of abomination. It's working for now and I've got characters moving again, but I'll call it placeholder.</p>
+<p>UI is nonexistent and input handling is simplistic for now. The thing that caused me the most trouble yesterday was coming up with a scheduler for entity actions/updates. Struggled with it for a while and ended up just reimplementing the basic scheme I used before, but with slightly better separation of concerns.</p>
+<p>The following is a screenshot showing scipy and matplotlib used to display isolated map regions. I've only figured out very basic usage so far, but maybe I can do something interesting in time.</p>
+<img alt="/images/ipython,%20scipy,%20matplotlib.png" src="images/ipython,%20scipy,%20matplotlib.png"><p>The game is currently running on 32-bit Python 2.7, with libtcod 1.5.1, numpy 1.9.2, scipy 0.16.0, and IPython 4.0.0.</p>
+<p>Libtcod is the main limitation here--I'm getting errors attempting to build a 64-bit version from the repo, and the Python bindings don't work properly on Python 3. I kind of want to switch to pyglet since there isn't really all that much benefit to being on libtcod aside from the simple console-like output. I don't want to try to implement my own tile engine at the moment though.</p>
+<p>Never mind what I said about wilderness generation being next. I really want to get multiple maps and map transitions working. Then see if I can force the edges of the cell-automaton generated maps to link up. Roaming through endless random caves has potential, and I can use that as a starting point for basic gameplay.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/spatial-indexing/" class="u-url">Spatial Indexing</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">
+                jskm
+            </span></p>
+            <p class="dateline"><a href="posts/spatial-indexing/" rel="bookmark"><time class="published dt-published" datetime="2015-08-19T20:36:00-04:00" title="2015-08-19 20:36">2015-08-19 20:36</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>I just spent nearly two days researching spatial indexing/partitioning.
+I'm trying to figure out what kind of structure I need to represent my
+game world.</p>
+<p>Initially, I was trying to find a way to identify contiguous regions in
+my generated map. I wanted to select isolated rooms (some can be seen in
+the previous screenshot) so I could try to do something with them. Maybe
+run a tunneling algorithm to connect them up to the rest of the map, or
+just convert them into something decorative like pools of water. Started
+looking at running flood fills and counting cells but quickly abandoned
+that. I don't want to try to manually implement flood fill in Python,
+given that I'm already seeing a small slowdown in generating this tiny
+map. I wanted a more efficient option, and eventually got to numpy and
+scipy. These two libraries allow fast processing of multi-dimensional
+arrays, and <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/ndimage.html#module-scipy.ndimage.measurements">these scipy
+functions</a>
+(particularly label) look like exactly the kind of thing I need. It took
+me some time to understand how it works, and now I've got a pending task
+to refit my map representation to use numpy arrays.</p>
+<p>With this, I started considering the possibility of treating the tilemap
+as essentially a 2D image. Each tile is pretty much just a pixel, so
+that should allow you to use all sorts of 2D graphics techniques to
+process a map. You could split a map into multiple layers, create masks,
+and treat them like sprites, blitting subregions onto a background.
+Something like that might be a way to support construction and terrain
+deformation in the game. What could be done with filters, shaders, and
+other such methods? I don't know much about those, so they're another
+subject to research later.</p>
+<p>From there I went to 2D collision techniques, looking at ways to quickly
+find intersections among intervals and points. I found references to
+R-trees, kd-trees, quadtrees, segment trees, and interval and range
+trees. After many hours I've understood pretty much nothing of the
+technical aspects of how they work, but the latter three look like
+useful constructs. I found <a class="reference external" href="http://0fps.net/2015/01/23/collision-detection-part-3-benchmarks/">this series of
+articles</a>
+which led to <a class="reference external" href="https://github.com/mikolalysenko/box-intersect">this Javascript
+library</a> that
+implements streaming segment trees. At least 10 hours yesterday were
+spent attempting to port this library to Python, both because I wanted
+to experiment and because I was hoping to learn about the algorithm and
+the techniques used to make it efficient. I only got partway through
+before hitting a major roadblock, in that the library seems to make
+heavy use of some kind of run-time code generation which I have no idea
+how to translate.</p>
+<p>Nobody seems to have written Python code that provides mutable 2D
+spatial trees. The best I can find seem to be the 1D <a class="reference external" href="https://pypi.python.org/pypi/intervaltree">intervaltree
+package</a> and the
+insert-only <a class="reference external" href="https://pypi.python.org/pypi/Pyqtree">pyqtree</a> quad
+tree. Maybe that'll be enough. In the end, though, all of that is
+completely irrelevant to the roguelike. Consensus is that <a class="reference external" href="http://gamedev.stackexchange.com/q/72030">uniform
+grids</a> and <a class="reference external" href="http://www.gamedev.net/page/resources/_/technical/game-programming/spatial-hashing-r2697">spatial
+hashing</a>
+are generally sufficient for box intersection in a game. Constructing
+and maintaining a tree is only worthwhile in cases where you have
+objects of widely varying dimensions or if they're sparsely distributed.
+Still, this may be useful for a later project.</p>
+<p>There's another significant challenge pending, namely making the map
+generation deterministic so that I can save its state. Even if I save
+the terrain layout of the map, I'm going to be using random minor
+variations in color and characters to texture the terrain. Modifying the
+terrain during gameplay will throw this off completely and result in
+blatant changes in appearance. I want to keep the terrain layout and
+appearance separate. That is, I just want to record that a cell contains
+grass; I don't want to store which of the 8 possible variations of grass
+tile the game displayed for that particular cell. And I just realized
+that I should be using a hash function here instead of an RNG. That'll
+fix the problem, assuming the function provides good distribution of
+values. Maybe save a random seed/salt value for each map, and then use a
+hash to combine that with each tile's position and terrain type to
+choose a variant.</p>
+<p>...and now I've spent some hours reading about Bloom filters, cuckoo
+hashing, key derivation functions, etc., while looking for a suitable
+Python hash function. Interesting post
+<a class="reference external" href="http://research.neustar.biz/2014/07/22/hitting-the-books-eads-summer-school-on-hashing/">here</a>
+(links to a Youtube playlist with videos).</p>
+<p>The step after this is going to be wilderness generation. I'll pause
+work on dungeon generation because I need to figure out map
+representation for towns and overworld terrain. I'm thinking that I'd
+like to have some z-level variation in surface maps, and I have an idea
+of how to visualize it, but that's something that needs to be
+prototyped. Giving it the right visual presentation will mean more
+trial-and-error color work, and I'll probably have to try out stuff like
+alpha blending and color interpolation.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/scheduling-and-terrain/" class="u-url">Scheduling and Terrain</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">
+                jskm
+            </span></p>
+            <p class="dateline"><a href="posts/scheduling-and-terrain/" rel="bookmark"><time class="published dt-published" datetime="2015-08-17T08:05:00-04:00" title="2015-08-17 08:05">2015-08-17 08:05</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>I've done more work on the roguelike prototype. Ran into a couple more challenges than I intended to deal with. I want to make the game turn-based, but I had to use a real-time game loop to avoid having very clunky and unresponsive input. So the UI updates at 60 fps, but I need the game entities to update in step with the player. I had to set up a very crude scheduler for entities along with an action queue system. At least now I can have my NPCs carry out move, wait, and loop instructions.</p>
+<p>Also had to start defining terrain characteristics so that I could start map generation. I'm currently using JSON to define symbol sets and colors for different terrain types, but it'll get much more complicated before it's capable of everything I'll need. I spent way too long trying to coordinate terrain patterns and colors. Finally, though, I've got the first dungeon generation algorithm working. Uses some simple cellular automaton rules, based on <a class="reference external" href="http://www.roguebasin.com/index.php?title=Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels">this article</a>. It looks pretty much like I wanted it to, but this method creates space as pretty much an unstructured blob. I'll have to eventually figure out how to establish/guarantee connectivity, find useful spaces for distributing dungeon features and monsters, and so on.</p>
+<img alt="/images/cellular%20automaton%20cave%20generation.png" src="images/cellular%20automaton%20cave%20generation.png"><p>The code at this point is a horrible mess. I'll need to rewrite it to use an entity-component system before I can get any actual gameplay going. For now, I'll just try to work out other methods of dungeon and overworld generation, and try to produce a decent map representation that can handle the features I require.</p>
+<p><a class="reference external" href="https://groups.google.com/d/msg/rec.games.roguelike.development/aIUAF_cGpds/Z02w9PNRvBEJ">Here's a good post</a> that lays out several of the basic systems needed for a roguelike game. I'm glad I stumbled across it since it kept me from having to discover them through trial and error.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="posts/getting-started/" class="u-url">Getting Started</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn">
+                jskm
+            </span></p>
+            <p class="dateline"><a href="posts/getting-started/" rel="bookmark"><time class="published dt-published" datetime="2015-08-11T02:42:00-04:00" title="2015-08-11 02:42">2015-08-11 02:42</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Lately I've been busy reading game development resources. I discovered the Phaser HTML5 game framework, and after spending a couple of days exploring the possibilities, found and followed a <a class="reference external" href="https://leanpub.com/html5shootemupinanafternoon">shmup tutorial</a>. Around the same time, I found guides to 2D sprite art and started learning about the basic skills involved. <a class="reference external" href="https://2d-game-art-tutorials.zeef.com/chris.hildenbrand#block_67059_inkscape-basics">This collection of vector art walkthroughs</a> turned out to be useful, along with more detailed guides like <a class="reference external" href="http://www.gamedev.net/page/resources/_/creative/visual-arts/the-total-beginner%E2%80%99s-guide-to-better-2d-game-art-r2959">this</a> and <a class="reference external" href="http://androidarts.com/art_tut.htmb">this</a>. Those and their many links helped me finally make some sense of colors and shading.</p>
+<p>I made a few attempts to integrate that information and practice constructing basic combinations of shapes. I've found I presently don't have the slightest intuition for artistic composition, so it takes me many, many hours of trial and error to construct even simple things. For example, I managed to put together the following "TrivialSprite" after 6-8 hours. It's intended for a simplistic top-down shooter idea where I wanted to mimic a tiny portion of the design of the game <a class="reference external" href="http://www.heatsig.com/">Heat Signature</a> (which looks interesting, incidentally).</p>
+<img alt="/images/TrivialSprite.png" src="images/TrivialSprite.png"><p>I've started to think that composing a piece of artwork involves much the same level of design work as writing a program of similar scope. A trivial object may be as straightforward as a script. A person or other complex figure requires composing multiple trivial objects and carefully aligning things like color and shading. A scene requires balancing/connecting lighting, colors, emphasis and such across many figures. Improving my ability in this would take a lot of work, and since I'm not feeling much interest/pleasure/affinity for the process of composition, I'm thinking I probably don't want to go much further with it.</p>
+<p>I've also started learning about roguelike development again. Went back to old resources and found many new ones. Between things like <a class="reference external" href="http://www.roguebasin.com/index.php?title=Articles">RogueBasin</a> and <a class="reference external" href="https://www.reddit.com/r/roguelikedev/comments/3g2mcw/faq_friday_18_input_handling/">/r/roguelikedev's FAQ Fridays</a>, there's a lot of information to work with. I've been learning about terrain generation and trying to prepare a prototype to experiment with. I'm currently following the <a class="reference external" href="http://www.roguebasin.com/index.php?title=Complete_Roguelike_Tutorial,_using_python%2Blibtcod">Python + libtcod tutorial</a> to refresh my memory. I've found many potential platforms to work with as well:</p>
+<ul class="simple">
+<li>
+<a class="reference external" href="https://bitbucket.org/libtcod/libtcod">libtcod</a> for console output</li>
+<li>
+<a class="reference external" href="https://github.com/SquidPony/SquidLib">SquidLib</a> for Java</li>
+<li>
+<a class="reference external" href="https://bitbucket.org/pyglet/pyglet">pyglet</a> for OpenGL in Python</li>
+<li>or even <a class="reference external" href="http://www.godotengine.org/wp">Godot</a>, a full, open-source game engine with scene editor, IDE, and Python-like scripting language.</li>
+</ul>
+<p>I've been seeing many examples of game designs and interfaces that seem simple enough to be accessible to me now. It's making many of my previous ideas more viable, so they keep cycling through my mind. I've got at least half a dozen clusters of fragments of ideas being formed. I have to figure out which one to isolate and focus on.</p>
+</div>
+    </div>
+    </article>
+</div>
+
+
+
+
+
+
+
+        </div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2015         <a href="mailto:jskm19@gmail.com">jskm</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates -->
+</body>
+</html>

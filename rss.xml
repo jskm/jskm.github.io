@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0"><channel><title>Noetic Circuits</title><link>https://jskm.github.io/</link><description>jskm's development blog.</description><atom:link href="https://jskm.github.io/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><lastBuildDate>Sat, 10 Oct 2015 22:06:21 GMT</lastBuildDate><generator>https://getnikola.com/</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Segmentation Progress</title><link>https://jskm.github.io/posts/segmentation-progress/</link><dc:creator>jskm</dc:creator><description>&lt;div&gt;&lt;p&gt;I managed to make some progress with map segmentation. I've been working with the scikit-image graph module, which has a fast implementation of Dijkstra's algorithm on numpy arrays. I've had it in mind since I saw this post a couple of weeks ago:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://scipy-user.10969.n7.nabble.com/SciPy-User-Efficient-Dijkstra-on-a-large-grid-td18144.html#message18156"&gt;http://scipy-user.10969.n7.nabble.com/SciPy-User-Efficient-Dijkstra-on-a-large-grid-td18144.html#message18156&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;It took me a long time to figure out how to use it properly. I even took to reading and modifying the source code to get the results I expected, which was complicated by the fact that it's written with Cython. I ended up removing the Cython declarations and using it as a Python module so I could follow the internal state, and eventually found the right inputs to use for it to work without modification.&lt;/p&gt;
+&lt;img alt="/images/Progress1.png" src="https://jskm.github.io/images/Progress1.png"&gt;
+&lt;img alt="/images/Progress2.png" src="https://jskm.github.io/images/Progress2.png"&gt;
+&lt;img alt="/images/Progress3.png" src="https://jskm.github.io/images/Progress3.png"&gt;&lt;/div&gt;</description><guid>https://jskm.github.io/posts/segmentation-progress/</guid><pubDate>Wed, 09 Sep 2015 21:00:00 GMT</pubDate></item><item><title>Defining Spaces</title><link>https://jskm.github.io/posts/defining-spaces/</link><dc:creator>jskm</dc:creator><description>&lt;div&gt;&lt;p&gt;Here's what I've managed for defining spaces so far. Just kept blindly
+using a number of scipy image processing functions till I managed to
+figure out what they did. Quickly noticed that the &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Distance_transform"&gt;distance transform
+function&lt;/a&gt; had
+potential, but I've spent an entire day trying to learn how to segment
+the map using that data. Attached are a couple of plots I generated
+showing the kind of information I've been able to extract. It looks like
+taking the local maxima of the distance transform does reasonably well
+for identifying distinct spaces. Now I think I need something similar to
+the &lt;a class="reference external" href="https://en.wikipedia.org/wiki/Watershed_(image_processing)"&gt;watershed
+transform&lt;/a&gt;
+to actually establish the boundaries of each room.&lt;/p&gt;
+&lt;img alt="/images/Spaces1.png" src="https://jskm.github.io/images/Spaces1.png"&gt;
+&lt;img alt="/images/Spaces2.png" src="https://jskm.github.io/images/Spaces2.png"&gt;&lt;/div&gt;</description><guid>https://jskm.github.io/posts/defining-spaces/</guid><pubDate>Fri, 04 Sep 2015 08:41:00 GMT</pubDate></item><item><title>Events, Scrolling</title><link>https://jskm.github.io/posts/events-scrolling/</link><dc:creator>jskm</dc:creator><description>&lt;div&gt;&lt;p&gt;For events, I was thinking of using publish/subscribe to connect the
+game's components and systems with each other. In that case I'd try to
+use an existing library, and
+&lt;a class="reference external" href="http://pubsub.sourceforge.net/"&gt;PyPubSub&lt;/a&gt; might be an option. Might
+also consider extracting the &lt;a class="reference external" href="https://github.com/django/django/tree/master/django/dispatch"&gt;dispatch
+module&lt;/a&gt;
+from Django
+(&lt;a class="reference external" href="https://docs.djangoproject.com/en/1.8/topics/signals/"&gt;docs&lt;/a&gt;) if
+it's independent enough. Though I don't know enough about the
+performance consequences of something like this, and performance is
+going to be a significant issue soon.&lt;/p&gt;
+&lt;p&gt;I'll need to do another rewrite soon, because the code is not at all
+designed to handle a scrolling viewport. Too much of it is based on
+assumptions about the screen being a single map. There are a lot of
+design issues to work out before that can happen properly, and at the
+same time I should think about reducing the amount of unnecessary work
+done on each frame. I likely won't be able to manage that before
+Saturday.&lt;/p&gt;
+&lt;p&gt;In the end, scrolling might be something that's better off dropped,
+because it substantially complicates many parts of the game. It depends
+on whether I'd be able to find the right abstraction to limit that.&lt;/p&gt;&lt;/div&gt;</description><guid>https://jskm.github.io/posts/events-scrolling/</guid><pubDate>Thu, 27 Aug 2015 20:02:00 GMT</pubDate></item><item><title>Infinite World</title><link>https://jskm.github.io/posts/infinite-world/</link><dc:creator>jskm</dc:creator><description>&lt;div&gt;&lt;p&gt;It took about 16 hours, but I managed to stitch multiple maps together
+with only rare defects on the edges. It looks really good to me, and the
+errors are likely just because I cut a couple of corners in the
+smoothing phase of the generation algorithm. Currently the game has no
+viewport concept, rendering a map per screen and switching maps when you
+walk off the border. I'm intending to redesign it for smooth scrolling,
+but that's been more of a challenge. I've been struggling with designing
+a world model for the game, to abstract away the individual maps and
+unify location handling.&lt;/p&gt;
+&lt;p&gt;As for what I might work on next... I could try spawning creatures
+and giving them basic behaviors. That sounds a bit complicated, though.
+Useful behavior for NPCs requires giving meaning to spaces in the world,
+and that might take a while to figure out. I wanted to prototype
+communication/interaction systems, but combat systems will be easier to
+get started on, and they don't need particularly intelligent behavior.&lt;/p&gt;
+&lt;p&gt;Pathfinding could be worth looking at. I just found &lt;a class="reference external" href="http://paleoludic.com/writing/"&gt;this
+blog&lt;/a&gt;, which has an interesting
+approach to roguelike game structure. It's rather different from what
+I've done so far, though. What I've got right now is an infinite world,
+so I don't know if &lt;a class="reference external" href="http://www.roguebasin.com/index.php?title=The_Incredible_Power_of_Dijkstra_Maps"&gt;Dijkstra
+maps&lt;/a&gt;
+are feasible.&lt;/p&gt;
+&lt;p&gt;There are also field-of-view and line-of-sight algorithms. I'm looking
+at &lt;a class="reference external" href="http://www.roguebasin.com/index.php?title=Restrictive_Precise_Angle_Shadowcasting"&gt;Restrictive Precise Angle
+Shadowcasting&lt;/a&gt;
+for the FOV algorithm.
+&lt;a class="reference external" href="http://www.roguebasin.com/index.php?title=FastLOS"&gt;FastLOS&lt;/a&gt; looks
+interesting; I'd have to implement it to understand what it actually
+does.&lt;/p&gt;
+&lt;p&gt;I haven't actually set up an event system, so inter-object communication
+is kind of limited at the moment. There are also a whole lot of
+optimization issues. Making the maps larger is very costly and I'll have
+to rewrite some of the drawing and update routines.&lt;/p&gt;
+&lt;p&gt;I may also look at increasing terrain complexity, creating more
+interesting features. Maybe wilderness or town maps as I mentioned
+before. That's somewhat easier to make visible progress on with the
+current state of the game. And there are lots of links to terrain
+generation material. A few such:&lt;/p&gt;
+&lt;p&gt;On noise:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://code.google.com/p/fractalterraingeneration/w/list"&gt;https://code.google.com/p/fractalterraingeneration/w/list&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf"&gt;http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="http://staffwww.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java"&gt;http://staffwww.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://github.com/caseman/noise"&gt;https://github.com/caseman/noise&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="line-block"&gt;
+&lt;div class="line"&gt;You might have already seen this one before:&lt;/div&gt;
+&lt;div class="line"&gt;&lt;a class="reference external" href="http://www-cs-students.stanford.edu/~amitp/game-programming/polygon-map-generation/"&gt;http://www-cs-students.stanford.edu/~amitp/game-programming/polygon-map-generation/&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="line-block"&gt;
+&lt;div class="line"&gt;And the more general:&lt;/div&gt;
+&lt;div class="line"&gt;&lt;a class="reference external" href="http://www-cs-students.stanford.edu/~amitp/gameprog.html"&gt;http://www-cs-students.stanford.edu/~amitp/gameprog.html&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="line-block"&gt;
+&lt;div class="line"&gt;There's this very interesting demo:&lt;/div&gt;
+&lt;div class="line"&gt;&lt;a class="reference external" href="http://tinykeep.com/dungen/"&gt;http://tinykeep.com/dungen/&lt;/a&gt;&lt;/div&gt;
+&lt;div class="line"&gt;With explanation:&lt;/div&gt;
+&lt;div class="line"&gt;&lt;a class="reference external" href="https://www.reddit.com/r/gamedev/comments/1dlwc4/procedural_dungeon_generation_algorithm_explained/"&gt;https://www.reddit.com/r/gamedev/comments/1dlwc4/procedural_dungeon_generation_algorithm_explained/&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;</description><guid>https://jskm.github.io/posts/infinite-world/</guid><pubDate>Wed, 26 Aug 2015 14:21:00 GMT</pubDate></item><item><title>Rewrite, NumPy, SciPy</title><link>https://jskm.github.io/posts/rewrite-numpy-scipy/</link><dc:creator>jskm</dc:creator><description>&lt;div&gt;&lt;p&gt;I'm feeling pretty good now. Friday was a really productive day. I began rewriting the game in-place, tearing open the code and extracting it into neater compartments. Once I got into it, it became surprisingly easy to progress. I think it helped that, after cutting out each piece, being able to focus on returning the program to a working state kept me on track. In the last day and a half, I've been able to unravel the nest of patchwork hackery I'd put together and get the program looking sensible again.&lt;/p&gt;
+&lt;p&gt;After initially cleaning up the game loop, I started thinking about the possibility of live-coding. Did a little research, and found out how to spawn an IPython console in a separate thread, with access to the game's internal state. Being able to inspect and modify the game's map structure and other data makes it much easier to follow what the map generation process is doing. I've managed to put together a couple of nice debug mechanisms and visualization functions, which should help with future complications.&lt;/p&gt;
+&lt;p&gt;Unfortunately Python doesn't have enough support for full live-coding. I can reload changed modules, but it won't update existing objects. After hearing about Clojure's advantages here, I'm more motivated to finally look into it now. Maybe once I'm done with my ideas for the roguelike.&lt;/p&gt;
+&lt;p&gt;I've reworked map handling to use numpy, which substantially increased the speed of the dungeon generation algorithm. It can run several iterations on the current map size in tens of milliseconds, much better than the couple of seconds it took before. I improved the way terrain variation was implemented, and based it on a hash function as mentioned before. I also started putting together the entity-component system, but since I have no idea what it really ought to look like, I don't know whether I've created some kind of abomination. It's working for now and I've got characters moving again, but I'll call it placeholder.&lt;/p&gt;
+&lt;p&gt;UI is nonexistent and input handling is simplistic for now. The thing that caused me the most trouble yesterday was coming up with a scheduler for entity actions/updates. Struggled with it for a while and ended up just reimplementing the basic scheme I used before, but with slightly better separation of concerns.&lt;/p&gt;
+&lt;p&gt;The following is a screenshot showing scipy and matplotlib used to display isolated map regions. I've only figured out very basic usage so far, but maybe I can do something interesting in time.&lt;/p&gt;
+&lt;img alt="/images/ipython,%20scipy,%20matplotlib.png" src="https://jskm.github.io/images/ipython,%20scipy,%20matplotlib.png"&gt;
+&lt;p&gt;The game is currently running on 32-bit Python 2.7, with libtcod 1.5.1, numpy 1.9.2, scipy 0.16.0, and IPython 4.0.0.&lt;/p&gt;
+&lt;p&gt;Libtcod is the main limitation here--I'm getting errors attempting to build a 64-bit version from the repo, and the Python bindings don't work properly on Python 3. I kind of want to switch to pyglet since there isn't really all that much benefit to being on libtcod aside from the simple console-like output. I don't want to try to implement my own tile engine at the moment though.&lt;/p&gt;
+&lt;p&gt;Never mind what I said about wilderness generation being next. I really want to get multiple maps and map transitions working. Then see if I can force the edges of the cell-automaton generated maps to link up. Roaming through endless random caves has potential, and I can use that as a starting point for basic gameplay.&lt;/p&gt;&lt;/div&gt;</description><guid>https://jskm.github.io/posts/rewrite-numpy-scipy/</guid><pubDate>Sat, 22 Aug 2015 09:17:00 GMT</pubDate></item><item><title>Spatial Indexing</title><link>https://jskm.github.io/posts/spatial-indexing/</link><dc:creator>jskm</dc:creator><description>&lt;div&gt;&lt;p&gt;I just spent nearly two days researching spatial indexing/partitioning.
+I'm trying to figure out what kind of structure I need to represent my
+game world.&lt;/p&gt;
+&lt;p&gt;Initially, I was trying to find a way to identify contiguous regions in
+my generated map. I wanted to select isolated rooms (some can be seen in
+the previous screenshot) so I could try to do something with them. Maybe
+run a tunneling algorithm to connect them up to the rest of the map, or
+just convert them into something decorative like pools of water. Started
+looking at running flood fills and counting cells but quickly abandoned
+that. I don't want to try to manually implement flood fill in Python,
+given that I'm already seeing a small slowdown in generating this tiny
+map. I wanted a more efficient option, and eventually got to numpy and
+scipy. These two libraries allow fast processing of multi-dimensional
+arrays, and &lt;a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/ndimage.html#module-scipy.ndimage.measurements"&gt;these scipy
+functions&lt;/a&gt;
+(particularly label) look like exactly the kind of thing I need. It took
+me some time to understand how it works, and now I've got a pending task
+to refit my map representation to use numpy arrays.&lt;/p&gt;
+&lt;p&gt;With this, I started considering the possibility of treating the tilemap
+as essentially a 2D image. Each tile is pretty much just a pixel, so
+that should allow you to use all sorts of 2D graphics techniques to
+process a map. You could split a map into multiple layers, create masks,
+and treat them like sprites, blitting subregions onto a background.
+Something like that might be a way to support construction and terrain
+deformation in the game. What could be done with filters, shaders, and
+other such methods? I don't know much about those, so they're another
+subject to research later.&lt;/p&gt;
+&lt;p&gt;From there I went to 2D collision techniques, looking at ways to quickly
+find intersections among intervals and points. I found references to
+R-trees, kd-trees, quadtrees, segment trees, and interval and range
+trees. After many hours I've understood pretty much nothing of the
+technical aspects of how they work, but the latter three look like
+useful constructs. I found &lt;a class="reference external" href="http://0fps.net/2015/01/23/collision-detection-part-3-benchmarks/"&gt;this series of
+articles&lt;/a&gt;
+which led to &lt;a class="reference external" href="https://github.com/mikolalysenko/box-intersect"&gt;this Javascript
+library&lt;/a&gt; that
+implements streaming segment trees. At least 10 hours yesterday were
+spent attempting to port this library to Python, both because I wanted
+to experiment and because I was hoping to learn about the algorithm and
+the techniques used to make it efficient. I only got partway through
+before hitting a major roadblock, in that the library seems to make
+heavy use of some kind of run-time code generation which I have no idea
+how to translate.&lt;/p&gt;
+&lt;p&gt;Nobody seems to have written Python code that provides mutable 2D
+spatial trees. The best I can find seem to be the 1D &lt;a class="reference external" href="https://pypi.python.org/pypi/intervaltree"&gt;intervaltree
+package&lt;/a&gt; and the
+insert-only &lt;a class="reference external" href="https://pypi.python.org/pypi/Pyqtree"&gt;pyqtree&lt;/a&gt; quad
+tree. Maybe that'll be enough. In the end, though, all of that is
+completely irrelevant to the roguelike. Consensus is that &lt;a class="reference external" href="http://gamedev.stackexchange.com/q/72030"&gt;uniform
+grids&lt;/a&gt; and &lt;a class="reference external" href="http://www.gamedev.net/page/resources/_/technical/game-programming/spatial-hashing-r2697"&gt;spatial
+hashing&lt;/a&gt;
+are generally sufficient for box intersection in a game. Constructing
+and maintaining a tree is only worthwhile in cases where you have
+objects of widely varying dimensions or if they're sparsely distributed.
+Still, this may be useful for a later project.&lt;/p&gt;
+&lt;p&gt;There's another significant challenge pending, namely making the map
+generation deterministic so that I can save its state. Even if I save
+the terrain layout of the map, I'm going to be using random minor
+variations in color and characters to texture the terrain. Modifying the
+terrain during gameplay will throw this off completely and result in
+blatant changes in appearance. I want to keep the terrain layout and
+appearance separate. That is, I just want to record that a cell contains
+grass; I don't want to store which of the 8 possible variations of grass
+tile the game displayed for that particular cell. And I just realized
+that I should be using a hash function here instead of an RNG. That'll
+fix the problem, assuming the function provides good distribution of
+values. Maybe save a random seed/salt value for each map, and then use a
+hash to combine that with each tile's position and terrain type to
+choose a variant.&lt;/p&gt;
+&lt;p&gt;...and now I've spent some hours reading about Bloom filters, cuckoo
+hashing, key derivation functions, etc., while looking for a suitable
+Python hash function. Interesting post
+&lt;a class="reference external" href="http://research.neustar.biz/2014/07/22/hitting-the-books-eads-summer-school-on-hashing/"&gt;here&lt;/a&gt;
+(links to a Youtube playlist with videos).&lt;/p&gt;
+&lt;p&gt;The step after this is going to be wilderness generation. I'll pause
+work on dungeon generation because I need to figure out map
+representation for towns and overworld terrain. I'm thinking that I'd
+like to have some z-level variation in surface maps, and I have an idea
+of how to visualize it, but that's something that needs to be
+prototyped. Giving it the right visual presentation will mean more
+trial-and-error color work, and I'll probably have to try out stuff like
+alpha blending and color interpolation.&lt;/p&gt;&lt;/div&gt;</description><guid>https://jskm.github.io/posts/spatial-indexing/</guid><pubDate>Thu, 20 Aug 2015 00:36:00 GMT</pubDate></item><item><title>Scheduling and Terrain</title><link>https://jskm.github.io/posts/scheduling-and-terrain/</link><dc:creator>jskm</dc:creator><description>&lt;div&gt;&lt;p&gt;I've done more work on the roguelike prototype. Ran into a couple more challenges than I intended to deal with. I want to make the game turn-based, but I had to use a real-time game loop to avoid having very clunky and unresponsive input. So the UI updates at 60 fps, but I need the game entities to update in step with the player. I had to set up a very crude scheduler for entities along with an action queue system. At least now I can have my NPCs carry out move, wait, and loop instructions.&lt;/p&gt;
+&lt;p&gt;Also had to start defining terrain characteristics so that I could start map generation. I'm currently using JSON to define symbol sets and colors for different terrain types, but it'll get much more complicated before it's capable of everything I'll need. I spent way too long trying to coordinate terrain patterns and colors. Finally, though, I've got the first dungeon generation algorithm working. Uses some simple cellular automaton rules, based on &lt;a class="reference external" href="http://www.roguebasin.com/index.php?title=Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels"&gt;this article&lt;/a&gt;. It looks pretty much like I wanted it to, but this method creates space as pretty much an unstructured blob. I'll have to eventually figure out how to establish/guarantee connectivity, find useful spaces for distributing dungeon features and monsters, and so on.&lt;/p&gt;
+&lt;img alt="/images/cellular%20automaton%20cave%20generation.png" src="https://jskm.github.io/images/cellular%20automaton%20cave%20generation.png"&gt;
+&lt;p&gt;The code at this point is a horrible mess. I'll need to rewrite it to use an entity-component system before I can get any actual gameplay going. For now, I'll just try to work out other methods of dungeon and overworld generation, and try to produce a decent map representation that can handle the features I require.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://groups.google.com/d/msg/rec.games.roguelike.development/aIUAF_cGpds/Z02w9PNRvBEJ"&gt;Here's a good post&lt;/a&gt; that lays out several of the basic systems needed for a roguelike game. I'm glad I stumbled across it since it kept me from having to discover them through trial and error.&lt;/p&gt;&lt;/div&gt;</description><guid>https://jskm.github.io/posts/scheduling-and-terrain/</guid><pubDate>Mon, 17 Aug 2015 12:05:00 GMT</pubDate></item><item><title>Getting Started</title><link>https://jskm.github.io/posts/getting-started/</link><dc:creator>jskm</dc:creator><description>&lt;div&gt;&lt;p&gt;Lately I've been busy reading game development resources. I discovered the Phaser HTML5 game framework, and after spending a couple of days exploring the possibilities, found and followed a &lt;a class="reference external" href="https://leanpub.com/html5shootemupinanafternoon"&gt;shmup tutorial&lt;/a&gt;. Around the same time, I found guides to 2D sprite art and started learning about the basic skills involved. &lt;a class="reference external" href="https://2d-game-art-tutorials.zeef.com/chris.hildenbrand#block_67059_inkscape-basics"&gt;This collection of vector art walkthroughs&lt;/a&gt; turned out to be useful, along with more detailed guides like &lt;a class="reference external" href="http://www.gamedev.net/page/resources/_/creative/visual-arts/the-total-beginner%E2%80%99s-guide-to-better-2d-game-art-r2959"&gt;this&lt;/a&gt; and &lt;a class="reference external" href="http://androidarts.com/art_tut.htmb"&gt;this&lt;/a&gt;. Those and their many links helped me finally make some sense of colors and shading.&lt;/p&gt;
+&lt;p&gt;I made a few attempts to integrate that information and practice constructing basic combinations of shapes. I've found I presently don't have the slightest intuition for artistic composition, so it takes me many, many hours of trial and error to construct even simple things. For example, I managed to put together the following "TrivialSprite" after 6-8 hours. It's intended for a simplistic top-down shooter idea where I wanted to mimic a tiny portion of the design of the game &lt;a class="reference external" href="http://www.heatsig.com/"&gt;Heat Signature&lt;/a&gt; (which looks interesting, incidentally).&lt;/p&gt;
+&lt;img alt="/images/TrivialSprite.png" src="https://jskm.github.io/images/TrivialSprite.png"&gt;
+&lt;p&gt;I've started to think that composing a piece of artwork involves much the same level of design work as writing a program of similar scope. A trivial object may be as straightforward as a script. A person or other complex figure requires composing multiple trivial objects and carefully aligning things like color and shading. A scene requires balancing/connecting lighting, colors, emphasis and such across many figures. Improving my ability in this would take a lot of work, and since I'm not feeling much interest/pleasure/affinity for the process of composition, I'm thinking I probably don't want to go much further with it.&lt;/p&gt;
+&lt;p&gt;I've also started learning about roguelike development again. Went back to old resources and found many new ones. Between things like &lt;a class="reference external" href="http://www.roguebasin.com/index.php?title=Articles"&gt;RogueBasin&lt;/a&gt; and &lt;a class="reference external" href="https://www.reddit.com/r/roguelikedev/comments/3g2mcw/faq_friday_18_input_handling/"&gt;/r/roguelikedev's FAQ Fridays&lt;/a&gt;, there's a lot of information to work with. I've been learning about terrain generation and trying to prepare a prototype to experiment with. I'm currently following the &lt;a class="reference external" href="http://www.roguebasin.com/index.php?title=Complete_Roguelike_Tutorial,_using_python%2Blibtcod"&gt;Python + libtcod tutorial&lt;/a&gt; to refresh my memory. I've found many potential platforms to work with as well:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://bitbucket.org/libtcod/libtcod"&gt;libtcod&lt;/a&gt; for console output&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://github.com/SquidPony/SquidLib"&gt;SquidLib&lt;/a&gt; for Java&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://bitbucket.org/pyglet/pyglet"&gt;pyglet&lt;/a&gt; for OpenGL in Python&lt;/li&gt;
+&lt;li&gt;or even &lt;a class="reference external" href="http://www.godotengine.org/wp"&gt;Godot&lt;/a&gt;, a full, open-source game engine with scene editor, IDE, and Python-like scripting language.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I've been seeing many examples of game designs and interfaces that seem simple enough to be accessible to me now. It's making many of my previous ideas more viable, so they keep cycling through my mind. I've got at least half a dozen clusters of fragments of ideas being formed. I have to figure out which one to isolate and focus on.&lt;/p&gt;&lt;/div&gt;</description><guid>https://jskm.github.io/posts/getting-started/</guid><pubDate>Tue, 11 Aug 2015 06:42:00 GMT</pubDate></item></channel></rss>
